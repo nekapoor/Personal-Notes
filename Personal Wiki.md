@@ -210,3 +210,81 @@ const AppNavigator = createStackNavigator(
 export default createAppContainer(AppNavigator);
 ```
 
+
+
+### How do I fix this error: `error Incorrect integrity when fetching from the cache`?
+
+I was trying to install an npm package and this error came up. Here is how I fixed it.
+
+Run this command
+
+```
+yarn cache clean
+```
+
+Then try to re-install the package.
+
+### After taking a picture using the camera on android, the captured file gets stored in cache. How do I persist this image into disk on the camera?
+
+I tried using the packages `react-native-fs` and `rn-fetch-blob`. But the only one I could get working was the `rn-fetch-blob` package. 
+
+First, install it:
+
+````react
+import RNFetchBlob from 'rn-fetch-blob'
+````
+
+Note that depending your version of react-native, you may need to link this package. You can do that by running: 
+
+```react
+react-native link rn-fetch-blob
+```
+
+As a reference, here is an [API link](https://github.com/joltup/rn-fetch-blob/wiki/File-System-Access-API) with methods `rn-fetch-blob` supports.
+
+The general idea is that after an image was captured, I attempted to create a folder in the Android file system. The first time the app was run, this would succeed. But after that, an error would occur saying the folder already existed. I just caught that error and didn't do anything. Here is the code for this:
+
+```react
+const dirs = RNFetchBlob.fs.dirs
+console.log(dirs.DocumentDir)
+
+const absolutePath = `${dirs.DocumentDir}/TestImages`
+
+RNFetchBlob.fs.mkdir(absolutePath)
+.then(() => { 
+console.log(" Dir Created ")
+})
+.catch((err) => { 
+console.log('Error creating dir; could be that it already exists')
+})
+
+```
+
+Above, I created a folder called `TestImages`. I used `dirs.DocumentDir` to store the images in that particular folder. Click [here](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#dirs) to see a list of other folders that (I think) you can write to. 
+
+```react
+RNFetchBlob.fs.cp(captured_image_path, absolutePath + '/test.jpg')
+  .then(() => { 
+  console.log('yes') 
+})
+  .catch((err) => { 
+  console.log(err) 
+})
+```
+This next part is where we actually copy over the file from where it lives in the cache to the path where we want it. 
+
+One note about the `captured_image_path` value. It will look something like this:
+
+```
+file:///data/user/0/com.find/cache/ReactNative_cropped_image_1827472054665065924.jpg
+```
+
+You'll need to strip away the `file://`, leaving you with the `captured_image_path` holding the value
+
+```
+/data/user/0/com.find/cache/ReactNative_cropped_image_1827472054665065924.jpg
+```
+
+in order for this to work. 
+
+This should be everything you need to make this work. 
