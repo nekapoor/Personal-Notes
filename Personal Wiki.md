@@ -264,10 +264,10 @@ Above, I created a folder called `TestImages`. I used `dirs.DocumentDir` to stor
 
 ```react
 RNFetchBlob.fs.cp(captured_image_path, absolutePath + '/test.jpg')
-  .then(() => { 
+.then(() => { 
   console.log('yes') 
 })
-  .catch((err) => { 
+.catch((err) => { 
   console.log(err) 
 })
 ```
