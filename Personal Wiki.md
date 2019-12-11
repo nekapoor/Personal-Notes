@@ -288,3 +288,43 @@ You'll need to strip away the `file://`, leaving you with the `captured_image_pa
 in order for this to work. 
 
 This should be everything you need to make this work. 
+
+
+
+### I wanted to sync a picture and associated json data with firebase (the picture with cloud storage and json with the firestorm database). But the idea came up that we could store the image as a base64 string. How do we do this in react-native?
+
+Let's assume we've taken a picture and we have the uri path for the image. The uri path is the image that looks like 
+
+```
+/<path>/<to>/<image>
+```
+
+I used react-native-fetch-blog and this code will generate a base64 string from the image
+
+```react
+RNFetchBlob.fs.readFile(imagePath, 'base64')
+.then((base64Data) => {
+	console.log(base64Data)
+})
+
+```
+
+Note that `imagePath` is the path to the path listed above. 
+
+Now,  the `base64Data` is a string and we can use that data to send it to firebase however we feel. 
+
+### What are some of the questions that come to mind when training images for a convolutional neural network?
+
+1. What if the images in question are a different size? Can a CNN account for this? 
+2. Can we use an entire image if only a small portion in the middle is the relevant part? Or do we need to crop? How will the CNN look at the other areas that aren't relevant to the processing? 
+3. 
+
+### When you receive a "react native mismatch version" error, how can you fix it?
+
+I used [this](https://stackoverflow.com/questions/47763824/react-native-version-mismatch) stack overflow thread. In particular, I used the answer that said to do the following: 
+
+1. Uninstall the app on the emulator
+2. `lsof -i :8081` 
+3. `kill -9 PID` (where `PID` is the pid value for the open connections on port 8081)
+4. Rebuild the android app (`react-native run-android`)
+
