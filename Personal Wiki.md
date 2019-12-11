@@ -328,3 +328,22 @@ I used [this](https://stackoverflow.com/questions/47763824/react-native-version-
 3. `kill -9 PID` (where `PID` is the pid value for the open connections on port 8081)
 4. Rebuild the android app (`react-native run-android`)
 
+### In Mailchimp, we build email templates and we can send them to Mandrill. In Mandrill, we can edit the template to include custom variables that we can populate from our web apps when we send mail out. How does this work?
+
+In our mandrill template editor (go to Outbound > Templates when you're logged into Mandrill). Click on your template and you'll see the HTML code. Go down to the area where you want to insert a custom variable and put something like
+
+```
+<div mc:edit="tutor_name"></div>
+```
+
+Of course, `tutor_name` should be changed to the text field you want to use. 
+
+Then in our code, depending on the framework you're using, you'll send some sort of a hash where the key is your custom variable names and the value is the value you want to include in your email template. So, for above, it would be: 
+
+```
+{
+	tutor_name: "Neeraj Kapoor",
+	...
+}
+```
+
