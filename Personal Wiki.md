@@ -347,3 +347,13 @@ Then in our code, depending on the framework you're using, you'll send some sort
 }
 ```
 
+### After using Keras to build a CNN, the model file generated at a .h5 extension. I tried to convert this in Python to a .tflite file. But when I ran this in my react-native app, it failed. How did I get this to work? 
+
+By using this command to convert our keras file into a `.tflite` file:
+
+`tflite_convert   --output_file=model.tflite   --keras_model_file=model.h5`
+
+This command line tool is installed when you install the Python tensor flow package. 
+
+You can see some examples [here](https://www.tensorflow.org/lite/convert/cmdline_examples). 
+
